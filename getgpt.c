@@ -61,7 +61,7 @@ int main(int argc, char **args)
 
 	//printf("===== GPT TABLE =====\n");
 	printf("---------------------------------------------------------------\n");
-	printf("START_LBA,    END_LBA,         LBA -    SIZE(MB) - NAME\n");
+	printf(" START_LBA,    END_LBA,        LBA -    SIZE(MB) - NAME\n");
 	printf("---------------------------------------------------------------\n");
 	/* skip 2 block */
 	read( fd_mmc, buffer, BLOCKSIZE );
@@ -114,10 +114,10 @@ int main(int argc, char **args)
 		}
 
 		/* caluate the partition size of MB */
-		psize = (lba_end - lba_start)/2/1024;
+		psize = (lba_end - lba_start+1)/2/1024;
 
 		/* Show partition info */
-		printf("0x%08X, 0x%08X, %10d - %10dM - (%s)\n", lba_start, lba_end, (lba_end-lba_start), psize+1, part_name);
+		printf("0x%08X, 0x%08X, %10d - %10dM - (%s)\n", lba_start, lba_end, (lba_end-lba_start+1), psize, part_name);
 	}
 
         return 0;
