@@ -113,11 +113,11 @@ int check_if_efi(char* gptheader)
 int parse_gpt_part(char* gpttable)
 {
 	int i, j;
-	unsigned int lba_start, lba_end, psize;
+	unsigned int lba_start, lba_end, psize_k, psize_m;
 	char part_name[80];
 
-	printf("\t     START         END       TOTAL                 NAME\n");
-	printf("\t--------------------------------------------------------------\n");
+	printf("\t          START         END       TOTAL                 NAME\n");
+	printf("\t--------------------------------------------------------------------------------\n");
 
 	for( j=0; j<MAXENTRYNUM; j++ ){
 		/* Check if this is the last partition */
@@ -144,14 +144,16 @@ int parse_gpt_part(char* gpttable)
 			lba_end |= ((gpttable[32+8+8-1-i+j*GPTENTRYSIZE]&0xFF)<<((8-1-i)*2*4));
 		}
 
+		/* caluate the partition size of KB */
+		psize_k = (lba_end - lba_start+1)/2;
 		/* caluate the partition size of MB */
-		psize = (lba_end - lba_start+1)/2/1024;
+		psize_m = (lba_end - lba_start+1)/2/1024;
 
 		/* Show partition info */
-		printf("\t0x%08X, 0x%08X, %10d - %10dM - (%s)\n", lba_start, lba_end, (lba_end-lba_start+1), psize, part_name);
+		printf("\t[%02d] 0x%08X, 0x%08X, %10d - %10dK - %10dM - (%s)\n", j+1, lba_start, lba_end, (lba_end-lba_start+1), psize_k, psize_m, part_name);
 	}
 	
-	printf("\t--------------------------------------------------------------\n");
+	printf("\t--------------------------------------------------------------------------------\n");
 	return 0;
 }
 
